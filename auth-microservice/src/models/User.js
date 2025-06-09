@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import e from "express";
 
 // Esquema para permisos
 const permissionSchema = new mongoose.Schema(
@@ -11,6 +12,18 @@ const permissionSchema = new mongoose.Schema(
     modulo: {
       type: String,
       required: true,
+    },
+    methods: {
+      //! TEMPORALMENTE CODIFICADO ASI ( HASTA VALIDAR LOGICA DE PERMISOS)
+      type: [String],
+      required: true,
+      validate: {
+        validator: function (v) {
+          return v.length > 0; // Debe tener al menos un método
+        },
+        message: "Debe especificar al menos un método para el permiso",
+      },
+      enum: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     },
   },
   { _id: false }
