@@ -5,6 +5,8 @@ import connectDB from "./config/database.js";
 import { router as authRoutes } from "./routes/auth.js";
 import { router as userRoutes } from "./routes/user.js";
 
+import { errorHandler } from "./middleware/errorHandler.js";
+
 const app = express();
 
 // Conectar a MongoDB
@@ -31,6 +33,9 @@ app.use((req, res, next) => {
 // Rutas de autenticación
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+
+// Middleware de manejo de errores
+app.use(errorHandler);
 
 // Ruta de salud del servicio
 app.get("/health", (req, res) => {
