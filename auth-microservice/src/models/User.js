@@ -69,8 +69,8 @@ const userSchema = new mongoose.Schema(
       type: roleSchema,
       required: true,
       default: {
-        id: "user",
-        title: "Usuario",
+        id: "attendee",
+        title: "Asistente",
         permissions: [],
       },
     },
