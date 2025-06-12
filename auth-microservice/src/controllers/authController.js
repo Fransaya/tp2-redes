@@ -159,6 +159,7 @@ class AuthController {
         message: "Token válido",
         data: {
           user: user.toPublicJSON(),
+          token: req.token.split(" ")[1],
         },
       });
     } catch (error) {

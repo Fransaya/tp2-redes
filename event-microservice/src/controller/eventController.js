@@ -2,7 +2,9 @@ import eventService from "../services/eventService.js";
 
 class EventController {
   // Obtener lista de eventos
-  async getEvents(req, res) {
+  async getEvents(req, res, next) {
+    const { id } = req.query;
+
     try {
       const events = await eventService.getEvents();
       res.status(200).json(events);
@@ -11,8 +13,18 @@ class EventController {
     }
   }
 
+  // Obtener evento por id
+  async getEventId(req, res, next) {
+    try {
+      const event = await eventService.getEventById(req.params.eventId);
+      res.status(200).json(event);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // Obtener lista de eventos activos
-  async getActiveEvents(req, res) {
+  async getActiveEvents(req, res, next) {
     try {
       const activeEvents = await eventService.getActiveEvents();
       res.status(200).json(activeEvents);
@@ -22,7 +34,7 @@ class EventController {
   }
 
   // Obtener lista de eventos por fecha de inicio o fin
-  async getEventsByDate(req, res) {
+  async getEventsByDate(req, res, next) {
     const { startDate, endDate } = req.query;
     try {
       const events = await eventService.getEventsByDate(startDate, endDate);
@@ -33,7 +45,7 @@ class EventController {
   }
 
   // Crear evento
-  async createEvent(req, res) {
+  async createEvent(req, res, next) {
     try {
       const eventData = req.body;
       const event = await eventService.createEvent(eventData);
@@ -44,7 +56,7 @@ class EventController {
   }
 
   // Actualizar informacion evento
-  async updateInfoEvent(req, res) {
+  async updateInfoEvent(req, res, next) {
     const { eventId } = req.params;
     const eventData = req.body;
     try {

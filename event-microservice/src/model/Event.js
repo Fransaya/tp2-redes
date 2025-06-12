@@ -61,20 +61,6 @@ const eventSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "El ID del organizador es requerido"],
     },
-    pricing: {
-      type: {
-        type: String,
-        enum: ["free", "paid"],
-        required: [true, "El tipo de precio es requerido"],
-      },
-      price: {
-        type: Number,
-        required: function () {
-          return this.pricing.type === "paid";
-        },
-        min: [0, "El precio no puede ser negativo"],
-      },
-    },
     status: {
       type: String,
       default: "Planificación",

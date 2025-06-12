@@ -9,6 +9,13 @@ export const eventRoutes = Router();
 
 // Obtener lista de eventos
 eventRoutes.get(
+  "/by-id",
+  authMiddleware,
+  permissionsMiddleware,
+  eventController.getEventId
+);
+
+eventRoutes.get(
   "/",
   authMiddleware,
   permissionsMiddleware,

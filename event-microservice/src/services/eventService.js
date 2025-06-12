@@ -1,6 +1,16 @@
 import Event from "../model/Event.js";
 
 class EventSerivce {
+  // Obtener evento por id
+  async getEventById(eventId) {
+    try {
+      const event = await Event.findById(eventId);
+      return event;
+    } catch (error) {
+      throw new Error("Error al obtener el evento por id");
+    }
+  }
+
   // Obtener lista de eventos
   async getEvents() {
     try {
