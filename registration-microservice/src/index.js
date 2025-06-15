@@ -6,6 +6,7 @@ import connectDB from "./config/database.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 import { inscriptionRoutes } from "./routes/inscription.js";
+import { typeInscriptionRoutes } from "./routes/typeInscription.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 
 // Rutas de Inscripcion
 app.use("/inscription", inscriptionRoutes);
+app.use("/type-inscription", typeInscriptionRoutes);
 
 // Middleware de manejo de errores
 app.use(errorHandler);
