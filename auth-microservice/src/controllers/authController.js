@@ -1,5 +1,5 @@
 import authService from "../services/authService.js";
-import { TokenUserService } from "../services/tokensUserService.js";
+import tokensUserService from "../services/tokensUserService.js";
 
 class AuthController {
   // Iniciar sesión
@@ -79,9 +79,9 @@ class AuthController {
         });
       }
 
-      const decoded = TokenUserService.verifyRefreshToken(refreshToken);
+      const decoded = tokensUserService.verifyRefreshToken(refreshToken);
 
-      const result = await TokenUserService.generateRefreshToken(
+      const result = await tokensUserService.generateRefreshToken(
         decoded.id,
         decoded.username,
         decoded.rol
@@ -158,8 +158,8 @@ class AuthController {
         success: true,
         message: "Token válido",
         data: {
-          user: user.toPublicJSON(),
-          token: req.token.split(" ")[1],
+          user: user, // or filter properties if needed
+          token: req.authorization,
         },
       });
     } catch (error) {

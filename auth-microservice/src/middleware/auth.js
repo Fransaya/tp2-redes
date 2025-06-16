@@ -1,4 +1,6 @@
 import authService from "../services/authService.js";
+import permissionService from "../services/permissionService.js";
+import tokensUserService from "../services/tokensUserService.js";
 
 // Middleware para verificar token de acceso
 export const authenticateToken = async (req, res, next) => {
@@ -13,7 +15,7 @@ export const authenticateToken = async (req, res, next) => {
       });
     }
 
-    const user = await authService.verifyAccessToken(token);
+    const user = await tokensUserService.verifyAccessToken(token);
     req.user = user;
     next();
   } catch (error) {
@@ -35,7 +37,7 @@ export const requirePermission = (moduloName) => {
         });
       }
 
-      const hasPermission = await authService.checkPermission(
+      const hasPermission = await permissionService.checkPermission(
         req.user._id,
         moduloName
       );
@@ -44,36 +46,6 @@ export const requirePermission = (moduloName) => {
         return res.status(403).json({
           success: false,
           message: `No tienes permisos para acceder al módulo: ${moduloName}`,
-        });
-      }
-
-      next();
-    } catch (error) {
-      return res.status(403).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  };
-};
-
-// Middleware para verificar roles específicos
-export const requireRole = (roleId) => {
-  return async (req, res, next) => {
-    try {
-      if (!req.user) {
-        return res.status(401).json({
-          success: false,
-          message: "Usuario no autenticado",
-        });
-      }
-
-      const hasRole = await authService.checkRole(req.user._id, roleId);
-
-      if (!hasRole) {
-        return res.status(403).json({
-          success: false,
-          message: `Acceso denegado. Rol requerido: ${roleId}`,
         });
       }
 
@@ -105,7 +77,7 @@ export const optionalAuth = async (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (token) {
-      const user = await authService.verifyAccessToken(token);
+      const user = await tokensUserService.verifyAccessToken(token);
       req.user = user;
     }
 

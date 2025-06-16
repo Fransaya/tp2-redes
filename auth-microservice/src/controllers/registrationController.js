@@ -3,7 +3,7 @@ import { UserRegistrationService } from "../services/registrationUserService.js"
 export class RegistrationController {
   async register(req, res) {
     try {
-      const { user, email, password } = req.body;
+      const { user, email, password, rol } = req.body;
 
       // Validacion de datos recibido
       if (!user || !password) {
@@ -25,6 +25,7 @@ export class RegistrationController {
         user,
         email,
         password,
+        rol,
       });
 
       return res.status(201).json({

@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 
-export class PermissionService {
+class PermissionService {
   async checkPermission(userId, moduleName) {
     try {
       const user = await User.findById(userId);
@@ -22,10 +22,14 @@ export class PermissionService {
         throw new Error("Usuario no encontrado");
       }
 
-      return user.permissions;
+      console.log("Permisos del usuario:", user);
+
+      return user.rol.permissions;
     } catch (error) {
       console.log("Error al obtener permisos", error);
       throw new Error("Error al obtener permisos");
     }
   }
 }
+
+export default new PermissionService();

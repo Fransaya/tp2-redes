@@ -35,7 +35,9 @@ export class UpdateController {
     try {
       const { userId, newStatus } = req.body;
 
-      if (!userId || !newStatus) {
+      console.log("Datos recibidos para actualizar estado:", userId, newStatus);
+
+      if (!userId || newStatus === undefined) {
         return res.status(400).json({
           success: false,
           message: "El id y nuevo estado es requerido",

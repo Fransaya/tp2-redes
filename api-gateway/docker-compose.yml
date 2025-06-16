@@ -1,0 +1,155 @@
+version: "3.8"
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - auth-service-1
+      - events-service-1
+      - inscriptions-service-1
+      - programations-service-1
+      - notifications-service-1
+    networks:
+      - microservices-network
+
+  auth-service-1:
+    build:
+      context: ../auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - microservices-network
+
+  auth-service-2:
+    build:
+      context: ../auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "3011:3011"
+    environment:
+      - NODE_ENV=production
+      - PORT=3011
+    networks:
+      - microservices-network
+
+  auth-service-3:
+    build:
+      context: ../auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "3021:3021"
+    environment:
+      - NODE_ENV=production
+      - PORT=3021
+    networks:
+      - microservices-network
+
+  events-service-1:
+    build:
+      context: ../events-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+    networks:
+      - microservices-network
+
+  events-service-2:
+    build:
+      context: ../events-service
+      dockerfile: Dockerfile
+    ports:
+      - "3012:3012"
+    environment:
+      - NODE_ENV=production
+      - PORT=3012
+    networks:
+      - microservices-network
+
+  inscriptions-service-1:
+    build:
+      context: ../inscriptions-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+    networks:
+      - microservices-network
+
+  inscriptions-service-2:
+    build:
+      context: ../inscriptions-service
+      dockerfile: Dockerfile
+    ports:
+      - "3013:3013"
+    environment:
+      - NODE_ENV=production
+      - PORT=3013
+    networks:
+      - microservices-network
+
+  programations-service-1:
+    build:
+      context: ../programations-service
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+    networks:
+      - microservices-network
+
+  programations-service-2:
+    build:
+      context: ../programations-service
+      dockerfile: Dockerfile
+    ports:
+      - "3014:3014"
+    environment:
+      - NODE_ENV=production
+      - PORT=3014
+    networks:
+      - microservices-network
+
+  notifications-service-1:
+    build:
+      context: ../notifications-service
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+    networks:
+      - microservices-network
+
+  notifications-service-2:
+    build:
+      context: ../notifications-service
+      dockerfile: Dockerfile
+    ports:
+      - "3015:3015"
+    environment:
+      - NODE_ENV=production
+      - PORT=3015
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge

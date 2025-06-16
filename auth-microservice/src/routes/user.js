@@ -5,6 +5,10 @@ import { RegistrationController } from "../controllers/registrationController.js
 import { GetInfoController } from "../controllers/getInfoController.js";
 import { PermissionController } from "../controllers/permissionController.js";
 import { UpdateController } from "../controllers/updateController.js";
+
+// Middleware de autenticacion
+import { authenticateToken } from "../middleware/auth.js";
+
 export const router = Router();
 
 // Instanciacion de controladores
@@ -17,19 +21,31 @@ const updateController = new UpdateController();
 router.post("/register", registrationController.register);
 
 // Obtengo informacion de usuario
-router.get("/info", getInfoController.getInfo);
+router.get("/info", authenticateToken, getInfoController.getInfo);
 
 // Obtengo permisos de usuario
-router.get("/permissions", permissionController.getPermissions);
+router.get(
+  "/permissions",
+  authenticateToken,
+  permissionController.getPermissions
+);
 
 // Verifico permisos de usuario
-router.get("/check-permission", permissionController.checkPermissions);
+router.get(
+  "/check-permission",
+  authenticateToken,
+  permissionController.checkPermissions
+);
 
 // Modificar informacion de usuario
-router.put("/update-info", updateController.updateInfo);
+router.put("/update-info", authenticateToken, updateController.updateInfo);
 
 // Modificar estado de usuario
-router.put("/update-status", updateController.updateStatus);
+router.put("/update-status", authenticateToken, updateController.updateStatus);
 
 // Modificar contraseña de usuario
-router.put("/update-password", updateController.updatePassword);
+router.put(
+  "/update-password",
+  authenticateToken,
+  updateController.updatePassword
+);

@@ -1,14 +1,39 @@
+// config/routes.config.js - Configuración actualizada con múltiples instancias
 export const ROUTES = [
   {
     url: "/auth",
     service: "auth",
     auth: false,
-    reteLimit: {
+    rateLimit: {
       windowMs: 15 * 60 * 1000,
       max: 100,
     },
+    instances: [
+      "http://localhost:3001/auth",
+      "http://localhost:3011/auth", // Segunda instancia del servicio auth
+      "http://localhost:3021/auth", // Tercera instancia del servicio auth
+    ],
     proxy: {
-      target: "http://localhost:3001",
+      changeOrigin: true,
+      pathRewrite: {
+        "^/auth": "",
+      },
+    },
+  },
+  {
+    url: "/user",
+    service: "user",
+    auth: false,
+    rateLimit: {
+      windowMs: 15 * 60 * 1000,
+      max: 100,
+    },
+    instances: [
+      "http://localhost:3001/user",
+      "http://localhost:3011/user", // Segunda instancia del servicio auth
+      "http://localhost:3021/user", // Tercera instancia del servicio auth
+    ],
+    proxy: {
       changeOrigin: true,
       pathRewrite: {
         "^/auth": "",
@@ -19,12 +44,12 @@ export const ROUTES = [
     url: "/events",
     service: "events",
     auth: true,
-    reteLimit: {
+    rateLimit: {
       windowMs: 15 * 60 * 1000,
       max: 100,
     },
+    instances: ["http://localhost:3002/events", "http://localhost:3012/events"],
     proxy: {
-      target: "http://localhost:3002",
       changeOrigin: true,
       pathRewrite: {
         "^/events": "",
@@ -35,12 +60,15 @@ export const ROUTES = [
     url: "/inscriptions",
     service: "inscriptions",
     auth: true,
-    reteLimit: {
+    rateLimit: {
       windowMs: 15 * 60 * 1000,
       max: 100,
     },
+    instances: [
+      "http://localhost:3003/inscriptions",
+      "http://localhost:3013/inscriptions",
+    ],
     proxy: {
-      target: "http://localhost:3003",
       changeOrigin: true,
       pathRewrite: {
         "^/inscriptions": "",
@@ -48,31 +76,37 @@ export const ROUTES = [
     },
   },
   {
-    url: "/programations",
-    service: "programations",
+    url: "/schedule",
+    service: "schedule",
     auth: true,
-    reteLimit: {
+    rateLimit: {
       windowMs: 15 * 60 * 1000,
       max: 100,
     },
+    instances: [
+      "http://localhost:3004/schedule",
+      "http://localhost:3014/schedule",
+    ],
     proxy: {
-      target: "http://localhost:3004",
       changeOrigin: true,
       pathRewrite: {
-        "^/programations": "",
+        "^/schedule": "",
       },
     },
   },
   {
-    url: "notifications",
+    url: "/notifications",
     service: "notifications",
     auth: true,
-    reteLimit: {
+    rateLimit: {
       windowMs: 15 * 60 * 1000,
       max: 100,
     },
+    instances: [
+      "http://localhost:3005/notifications",
+      "http://localhost:3015/notifications",
+    ],
     proxy: {
-      target: "http://localhost:3005",
       changeOrigin: true,
       pathRewrite: {
         "^/notifications": "",

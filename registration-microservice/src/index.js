@@ -8,6 +8,10 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { inscriptionRoutes } from "./routes/inscription.js";
 import { typeInscriptionRoutes } from "./routes/typeInscription.js";
 
+// Middleware de proteccion y permisos
+import { authMiddleware } from "./middleware/authMiddleware.js";
+import { permissionsMiddleware } from "./middleware/permissionsMiddleware.js";
+
 const app = express();
 
 // Conectar a MongoDB
@@ -34,8 +38,18 @@ app.use((req, res, next) => {
 });
 
 // Rutas de Inscripcion
-app.use("/inscription", inscriptionRoutes);
-app.use("/type-inscription", typeInscriptionRoutes);
+app.use(
+  "/inscription",
+  authMiddleware,
+  permissionsMiddleware,
+  inscriptionRoutes
+);
+app.use(
+  "/type-inscription",
+  authMiddleware,
+  permissionsMiddleware,
+  typeInscriptionRoutes
+);
 
 // Middleware de manejo de errores
 app.use(errorHandler);

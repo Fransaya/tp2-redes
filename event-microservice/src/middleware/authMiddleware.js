@@ -1,4 +1,4 @@
-import { axiosAuthMicroservice } from "../utils/axiosConfig";
+import { axiosAuthMicroservice } from "../utils/axiosConfig.js";
 
 export const authMiddleware = (req, res, next) => {
   const headers = req.headers.authorization;
@@ -20,8 +20,9 @@ export const authMiddleware = (req, res, next) => {
       },
     })
     .then((response) => {
+      const dataUser = response.data.data;
       // Si la verificación es exitosa, se agrega el usuario al request
-      req.user = response.data.user;
+      req.user = { ...dataUser.user, token };
       next();
     })
     .catch((error) => {

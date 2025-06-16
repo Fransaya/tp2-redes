@@ -19,25 +19,90 @@ export class UserRegistrationService {
         throw new Error("El usuario ya existe");
       }
 
-      const hasshedPassword = await bcrypt.hash(user.password, 10);
+      const predefinedRoles = [
+        {
+          id: "admin",
+          title: "Administrador",
+          permissions: [
+            {
+              id: "auth",
+              modulo: "auth",
+              methods: ["GET", "POST", "PUT", "DELETE"],
+            },
+            {
+              id: "events",
+              modulo: "events",
+              methods: ["GET", "POST", "PUT", "DELETE"],
+            },
+            {
+              id: "registration",
+              modulo: "registration",
+              methods: ["GET", "POST", "PUT", "DELETE"],
+            },
+            {
+              id: "schedule",
+              modulo: "schedule",
+              methods: ["GET", "POST", "PUT", "DELETE"],
+            },
+            {
+              id: "notifications",
+              modulo: "notifications",
+              methods: ["GET", "POST", "PUT", "DELETE"],
+            },
+          ],
+        },
+        {
+          id: "organizer",
+          title: "Organizador",
+          permissions: [
+            { id: "events", modulo: "events", methods: ["GET", "POST", "PUT"] },
+            {
+              id: "registration",
+              modulo: "registration",
+              methods: ["GET", "POST", "PUT"],
+            },
+            {
+              id: "schedule",
+              modulo: "schedule",
+              methods: ["GET", "POST", "PUT"],
+            },
+            {
+              id: "notifications",
+              modulo: "notifications",
+              methods: ["GET", "POST"],
+            },
+          ],
+        },
+        {
+          id: "attendee",
+          title: "Asistente",
+          permissions: [
+            { id: "events", modulo: "events", methods: ["GET"] },
+            {
+              id: "registration",
+              modulo: "registration",
+              methods: ["GET", "POST"],
+            },
+            { id: "schedule", modulo: "schedule", methods: ["GET"] },
+            { id: "notifications", modulo: "notifications", methods: ["GET"] },
+          ],
+        },
+      ];
 
-      const defaultRole = {
-        id: "user",
-        title: "Usuario",
-        permissions: [
-          {
-            id: "read",
-            modulo: "dashboard",
-          },
-        ],
-      };
+      let rolAssgigned;
+      if (user.rol) {
+        rolAssgigned = predefinedRoles.find((r) => r.id === user.rol.id);
+      }
+      if (!rolAssgigned) {
+        rolAssgigned = predefinedRoles.find((r) => r.id === "attendee");
+      }
 
       // Crear un nuevo usuario
       const newUser = new User({
         user: user.user,
         email: user.email,
-        password: hasshedPassword,
-        rol: defaultRole,
+        password: user.password,
+        rol: rolAssgigned,
         totpValidation: false,
         status: true,
       });

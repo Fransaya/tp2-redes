@@ -4,9 +4,37 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "start:gateway": "node src/app.js",
+    "dev:gateway": "nodemon src/app.js",
+    "start:auth": "cd ../auth-microservice && npm start",
+    "start:events": "cd ../event-microservice && npm start",
+    "start:inscriptions": "cd ../registration-microservice && npm start",
+    "start:programations": "cd ../schedule-microservice && npm start",
+    "start:notifications": "cd ../notification-microservice && npm start",
+    "dev:auth": "cd ../auth-microservice && npm run dev",
+    "dev:events": "cd ../event-microservice && npm run dev",
+    "dev:inscriptions": "cd ../registration-microservice && npm run dev",
+    "dev:programations": "cd ../schedule-microservice && npm run dev",
+    "dev:notifications": "cd ../notification-microservice && npm run dev",
+    "start:auth-instances": "concurrently \"PORT=3001 cd ../auth-microservice && npm start\" \"PORT=3011 cd ../auth-microservice && npm start\" \"PORT=3021 cd ../auth-microservice && npm start\"",
+    "start:events-instances": "concurrently \"PORT=3002 cd ../event-microservice && npm start\" \"PORT=3012 cd ../event-microservice && npm start\"",
+    "start:inscriptions-instances": "concurrently \"PORT=3003 cd ../registration-microservice && npm start\" \"PORT=3013 cd ../registration-microservice && npm start\"",
+    "start:programations-instances": "concurrently \"PORT=3004 cd ../schedule-microservice && npm start\" \"PORT=3014 cd ../schedule-microservice && npm start\"",
+    "start:notifications-instances": "concurrently \"PORT=3005 cd ../notification-microservice && npm start\" \"PORT=3015 cd ../notification-microservice && npm start\"",
+    "start:all-services": "concurrently --kill-others --names \"GATEWAY,AUTH1,AUTH2,AUTH3,EVENTS1,EVENTS2,INSCR1,INSCR2,PROG1,PROG2,NOTIF1,NOTIF2\" --prefix \"[{name}]\" --prefix-colors \"cyan,green,green,green,yellow,yellow,blue,blue,magenta,magenta,red,red\" \"npm run start:gateway\" \"PORT=3001 cd ../auth-microservice && npm start\" \"PORT=3011 cd ../auth-microservice && npm start\" \"PORT=3021 cd ../auth-microservice && npm start\" \"PORT=3002 cd ../event-microservice && npm start\" \"PORT=3012 cd ../event-microservice && npm start\" \"PORT=3003 cd ../registration-microservice && npm start\" \"PORT=3013 cd ../registration-microservice && npm start\" \"PORT=3004 cd ../schedule-microservice && npm start\" \"PORT=3014 cd ../schedule-microservice && npm start\" \"PORT=3005 cd ../notification-microservice && npm start\" \"PORT=3015 cd ../notification-microservice && npm start\"",
+    "dev:all-services": "concurrently --kill-others --names \"GATEWAY,AUTH1,AUTH2,AUTH3,EVENTS1,EVENTS2,INSCR1,INSCR2,PROG1,PROG2,NOTIF1,NOTIF2\" --prefix \"[{name}]\" --prefix-colors \"cyan,green,green,green,yellow,yellow,blue,blue,magenta,magenta,red,red\" \"npm run dev:gateway\" \"PORT=3001 cd ../auth-microservice && npm run dev\" \"PORT=3011 cd ../auth-microservice && npm run dev\" \"PORT=3021 cd ../auth-microservice && npm run dev\" \"PORT=3002 cd ../event-microservice && npm run dev\" \"PORT=3012 cd ../event-microservice && npm run dev\" \"PORT=3003 cd ../registration-microservice && npm run dev\" \"PORT=3013 cd ../registration-microservice && npm run dev\" \"PORT=3004 cd ../schedule-microservice && npm run dev\" \"PORT=3014 cd ../schedule-microservice && npm run dev\" \"PORT=3005 cd ../notification-microservice && npm run dev\" \"PORT=3015 cd ../notification-microservice && npm run dev\"",
+    "start:minimal": "concurrently --kill-others --names \"GATEWAY,AUTH,EVENTS,INSCR,PROG,NOTIF\" --prefix \"[{name}]\" --prefix-colors \"cyan,green,yellow,blue,magenta,red\" \"npm run start:gateway\" \"PORT=3001 cd ../auth-microservice && npm start\" \"PORT=3002 cd ../event-microservice && npm start\" \"PORT=3003 cd ../registration-microservice && npm start\" \"PORT=3004 cd ../schedule-microservice && npm start\" \"PORT=3005 cd ../notification-microservice && npm start\"",
+    "dev:minimal": "concurrently --kill-others --names \"GATEWAY,AUTH,EVENTS,INSCR,PROG,NOTIF\" --prefix \"[{name}]\" --prefix-colors \"cyan,green,yellow,blue,magenta,red\" \"npm run dev:gateway\" \"PORT=3001 cd ../auth-microservice && npm run dev\" \"PORT=3002 cd ../event-microservice && npm run dev\" \"PORT=3003 cd ../registration-microservice && npm run dev\" \"PORT=3004 cd ../schedule-microservice && npm run dev\" \"PORT=3005 cd ../notification-microservice && npm run dev\"",
+    "stop:all": "pkill -f \"node.*3[0-9][0-9][0-9]\"",
+    "logs": "concurrently --raw \"tail -f logs/gateway.log\" \"tail -f logs/auth.log\" \"tail -f logs/events.log\" \"tail -f logs/inscriptions.log\" \"tail -f logs/programations.log\" \"tail -f logs/notifications.log\"",
+    "health:check": "node scripts/health-check.js",
+    "services:status": "curl -s http://localhost:3000/gateway/status | jq .",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +46,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-jwt": "^8.5.1",
+    "express-rate-limit": "^7.5.0",
     "http-proxy-middleware": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
@@ -25,6 +54,7 @@
     "otplib": "^12.0.1"
   },
   "devDependencies": {
+    "concurrently": "^8.2.0",
     "nodemon": "^3.1.7"
   }
 }

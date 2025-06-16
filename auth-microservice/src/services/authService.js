@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
+import tokensUserService from "./tokensUserService.js";
+
 import speakeasy from "speakeasy";
 
 dotenv.config();
@@ -16,7 +18,6 @@ class AuthService {
       throw new Error("Credenciales inválidas");
     }
 
-    // Verificar contraseña
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       throw new Error("Credenciales inválidas");
@@ -29,8 +30,8 @@ class AuthService {
     await user.cleanExpiredTokens();
 
     // Generar tokens
-    const accessToken = this.generateAccessToken(user._id);
-    const refreshToken = await this.generateRefreshToken(user._id);
+    const accessToken = await tokensUserService.generateAccessToken(user._id);
+    const refreshToken = await tokensUserService.generateRefreshToken(user._id);
 
     // Guardar refresh token
     user.refreshTokens.push({

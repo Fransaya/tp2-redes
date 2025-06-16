@@ -4,9 +4,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export class TokenUserService {
+class TokenUserService {
   // Genero un nuevo token de acceso
-  async generateAccessTokn(userId, username, rol) {
+  async generateAccessToken(userId, username, rol) {
     try {
       const payloadToken = {
         id: userId,
@@ -101,3 +101,5 @@ export class TokenUserService {
     }
   }
 }
+
+export default new TokenUserService();

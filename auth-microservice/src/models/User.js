@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import e from "express";
 
 // Esquema para permisos
 const permissionSchema = new mongoose.Schema(
@@ -154,7 +153,9 @@ userSchema.pre(["updateOne", "findOneAndUpdate"], function () {
 
 // Método de instancia para comparar contraseñas
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+  console.log("contraseña almacenada:", this.password);
+  console.log("Contraseña candidata:", candidatePassword);
+  return bcrypt.compareSync(candidatePassword, this.password);
 };
 
 // Método de instancia para obtener datos públicos del usuario

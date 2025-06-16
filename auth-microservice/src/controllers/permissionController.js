@@ -1,4 +1,4 @@
-import { PermissionService } from "../services/permissionService.js";
+import permissionService from "../services/permissionService.js";
 
 export class PermissionController {
   async getPermissions(req, res) {
@@ -12,7 +12,6 @@ export class PermissionController {
         });
       }
 
-      const permissionService = new PermissionService();
       const result = await permissionService.getPermissions(userId);
 
       return res.status(200).json({
@@ -39,7 +38,6 @@ export class PermissionController {
         });
       }
 
-      const permissionService = new PermissionService();
       const result = await permissionService.checkPermission(
         userId,
         moduleName
