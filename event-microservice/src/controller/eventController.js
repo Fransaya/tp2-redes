@@ -57,7 +57,7 @@ class EventController {
 
   // Actualizar informacion evento
   async updateInfoEvent(req, res, next) {
-    const { eventId } = req.params;
+    const { eventId } = req.query;
     const eventData = req.body;
     try {
       const updatedEvent = await eventService.updateInfoEvent(
@@ -72,17 +72,14 @@ class EventController {
 
   // Modificar fechas de evento
   async updateEventDates(req, res, next) {
-    const eventId = req.params.eventId;
+    const { eventId } = req.query;
     const { startDate, endDate } = req.body;
 
-    const eventData = {
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-    };
     try {
       const updatedEvent = await eventService.updateEventDates(
         eventId,
-        eventData
+        startDate,
+        endDate
       );
       res.status(200).json(updatedEvent);
     } catch (error) {
@@ -92,7 +89,7 @@ class EventController {
 
   // Modificar ubicacion del evento
   async updateEventLocation(req, res, next) {
-    const eventId = req.params.eventId;
+    const { eventId } = req.query;
     const { location } = req.body;
 
     try {
@@ -108,11 +105,13 @@ class EventController {
 
   // Modifificar capacidad del evento
   async updateEventCapacity(req, res, next) {
-    const eventId = req.params.eventId;
+    const { eventId } = req.query;
     const { capacity } = req.body;
 
+    console.log("capacity", capacity);
+
     try {
-      const updatedEvent = await eventService.updateEventCapacity(
+      const updatedEvent = await eventService.updateCapacityEvent(
         eventId,
         capacity
       );
@@ -124,11 +123,11 @@ class EventController {
 
   // Actualizar el estado del evento
   async updateEventStatus(req, res) {
-    const { eventId } = req.params;
+    const { eventId } = req.query;
     const { status } = req.body;
 
     try {
-      const updatedEvent = await eventService.updateEventStatus(
+      const updatedEvent = await eventService.updateStatusEvent(
         eventId,
         status
       );

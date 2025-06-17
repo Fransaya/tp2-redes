@@ -1,4 +1,4 @@
-import { TokenUserService } from "../services/tokensUserService.js";
+import tokensUserService from "../services/tokensUserService.js";
 
 export class TokenUserController {
   async generateAccessToken(req, res) {
@@ -11,8 +11,7 @@ export class TokenUserController {
         });
       }
 
-      const tokenUserService = new TokenUserService();
-      const accessToken = await tokenUserService.generateAccessTokn(
+      const accessToken = await tokensUserService.generateAccessToken(
         userId,
         username,
         rol
@@ -42,8 +41,7 @@ export class TokenUserController {
         });
       }
 
-      const tokenUserService = new TokenUserService();
-      const refreshToken = await tokenUserService.generateRefreshToken(
+      const refreshToken = await tokensUserService.generateRefreshToken(
         userId,
         username,
         rol
@@ -72,8 +70,7 @@ export class TokenUserController {
         });
       }
 
-      const tokenUserService = new TokenUserService();
-      const decoded = await tokenUserService.verifyAccessToken(accessToken);
+      const decoded = await tokensUserService.verifyAccessToken(accessToken);
 
       return res.status(200).json({
         success: true,
@@ -98,8 +95,7 @@ export class TokenUserController {
         });
       }
 
-      const tokenUserService = new TokenUserService();
-      const decoded = await tokenUserService.verifyRefreshToken(refreshToken);
+      const decoded = await tokensUserService.verifyRefreshToken(refreshToken);
 
       return res.status(200).json({
         success: true,

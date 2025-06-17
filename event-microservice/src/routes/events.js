@@ -44,7 +44,7 @@ eventRoutes.post(
 
 // Actualizar informacion evento
 eventRoutes.put(
-  "/:eventId",
+  "/",
   authMiddleware,
   permissionsMiddleware,
   eventController.updateInfoEvent
@@ -52,28 +52,28 @@ eventRoutes.put(
 
 // Actualizar fechas del evento
 eventRoutes.patch(
-  "/:eventId/dates",
+  "/dates",
   authMiddleware,
   permissionsMiddleware,
   eventController.updateEventDates
 );
 // Actualizar ubicación del evento
 eventRoutes.patch(
-  "/:eventId/location",
+  "/location",
   authMiddleware,
   permissionsMiddleware,
   eventController.updateEventLocation
 );
 // Actualizar capacidad del evento
 eventRoutes.patch(
-  "/:eventId/capacity",
+  "/capacity",
   authMiddleware,
   permissionsMiddleware,
   eventController.updateEventCapacity
 );
 // Actualizar estado del evento
 eventRoutes.patch(
-  "/:eventId/status",
+  "/status",
   authMiddleware,
   permissionsMiddleware,
   eventController.updateEventStatus

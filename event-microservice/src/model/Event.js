@@ -22,13 +22,6 @@ const eventSchema = new mongoose.Schema(
     endDate: {
       type: Date,
       required: [true, "La fecha de finalización del evento es requerida"],
-      validate: {
-        validator: function (value) {
-          return value > this.startDate;
-        },
-        message:
-          "La fecha de finalización debe ser posterior a la fecha de inicio",
-      },
     },
     location: {
       name: {

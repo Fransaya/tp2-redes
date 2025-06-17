@@ -2,7 +2,7 @@ import { axiosUserMicroservice } from "../utils/axiosConfig.js";
 
 export const permissionsMiddleware = (req, res, next) => {
   const user = req.user;
-  console.log("user en permissionsMiddleware:", user);
+  // console.log("user en permissionsMiddleware:", user);
   const moduleName = req.params.moduleName || req.query.moduleName;
   if (!user || !moduleName) {
     return res.status(400).json({

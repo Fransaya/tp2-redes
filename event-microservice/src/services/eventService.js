@@ -24,7 +24,7 @@ class EventSerivce {
   // Obtener lista de eventos activos
   async getActiveEvents() {
     try {
-      const activeEvents = await Event.find({ status: true });
+      const activeEvents = await Event.find({ status: "Activo" });
       return activeEvents;
     } catch (error) {
       throw new Error("Error al obtener los eventos activos");
@@ -81,10 +81,20 @@ class EventSerivce {
   // Modificar fechas evento
   async updateEventDates(eventId, startDate, endDate) {
     try {
+      if (!startDate || !endDate) {
+        throw new Error("Las fechas de inicio y fin son requeridas");
+      }
+
+      if (new Date(startDate) >= new Date(endDate)) {
+        throw new Error(
+          "La fecha de inicio debe ser anterior a la fecha de fin"
+        );
+      }
+
       const event = await Event.findByIdAndUpdate(
         eventId,
         { startDate: new Date(startDate), endDate: new Date(endDate) },
-        { new: true, runValidators: true }
+        { new: true }
       );
       if (!event) {
         throw new Error("Evento no encontrado");
@@ -104,7 +114,7 @@ class EventSerivce {
       const event = await Event.findByIdAndUpdate(
         eventId,
         { location: location },
-        { new: true, runValidators: true }
+        { new: true }
       );
       if (!event) {
         throw new Error("Evento no encontrado");
@@ -122,8 +132,8 @@ class EventSerivce {
     try {
       const event = await Event.findByIdAndUpdate(
         eventId,
-        { location: capacity },
-        { new: true, runValidators: true }
+        { capacity: capacity },
+        { new: true }
       );
       if (!event) {
         throw new Error("Evento no encontrado");

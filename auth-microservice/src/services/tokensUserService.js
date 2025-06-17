@@ -15,7 +15,7 @@ class TokenUserService {
       };
 
       const accessToken = jwt.sign(payloadToken, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE || "15m",
+        expiresIn: process.env.JWT_EXPIRE || "1h",
       });
 
       return accessToken;
