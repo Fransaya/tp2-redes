@@ -12,9 +12,12 @@ export const permissionsMiddleware = (req, res, next) => {
 
   axiosUserMicroservice
     .get("/check-permission", {
-      query: {
-        userId: user._id,
+      params: {
+        userId: user.id,
         moduleName: moduleName,
+      },
+      headers: {
+        Authorization: `Bearer ${user.token}`,
       },
     })
     .then((response) => {

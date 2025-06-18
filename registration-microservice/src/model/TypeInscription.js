@@ -15,7 +15,7 @@ const typeInscriptionSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: true,
+    required: false,
   },
   status: {
     type: Boolean,

@@ -42,6 +42,7 @@ class TypeInscriptionService {
       await newTypeInscription.save();
       return newTypeInscription;
     } catch (error) {
+      console.error("Error al crear el tipo de inscripción:", error);
       throw new Error("Error al crear el tipo de inscripción");
     }
   }

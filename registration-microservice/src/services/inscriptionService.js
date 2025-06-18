@@ -17,9 +17,10 @@ class InscriptionService {
   // Obtener lista de inscripciones activas o no canceladas
   async getActiveInscriptions() {
     try {
-      const inscriptions = await Inscription.finde({
+      const inscriptions = await Inscription.find({
         status: true,
       });
+      return inscriptions;
     } catch (error) {
       throw new Error("Error al obtener las inscripciones activas");
     }
@@ -85,16 +86,24 @@ class InscriptionService {
   // Registrar inscripcion
   async createInscription(inscriptionData, token) {
     try {
-      //1. Validacion de existencia de evento y estado
-      const event = await axios.get(
-        `http://localhost:3002/events/${inscriptionData.event._id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      console.log("Datos de inscripcion:", inscriptionData);
+
+      let event;
+      try {
+        //1. Validacion de existencia de evento y estado
+        event = await axios.get(
+          `http://localhost:3002/event/by-id?eventId=${inscriptionData.event}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error al valida evento:", error);
+      }
+      console.log("Evento encontrado:", event.data);
       if (!event.data) {
         throw new Error("Evento no encontrado");
       }
