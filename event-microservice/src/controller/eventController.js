@@ -16,7 +16,8 @@ class EventController {
   // Obtener evento por id
   async getEventId(req, res, next) {
     try {
-      const event = await eventService.getEventById(req.params.eventId);
+      const { eventId } = req.query;
+      const event = await eventService.getEventById(eventId);
       res.status(200).json(event);
     } catch (error) {
       next(error);

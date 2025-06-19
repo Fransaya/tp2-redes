@@ -138,10 +138,13 @@ class InscriptionController {
     const { inscriptionId } = req.query;
     const body = req.body;
 
+    const token = req.headers.authorization?.split(" ")[1];
+
     try {
       const updatedInscription = await inscriptionService.updateInfoInscription(
         inscriptionId,
-        body
+        body,
+        token
       );
       if (!updatedInscription) {
         return res.status(404).json({ message: "Inscripción no encontrada" });

@@ -45,7 +45,7 @@ const inscriptionSchema = new mongoose.Schema({
   },
   amount: {
     type: Number,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,

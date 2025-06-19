@@ -92,7 +92,7 @@ class InscriptionService {
       try {
         //1. Validacion de existencia de evento y estado
         event = await axios.get(
-          `http://localhost:3002/event/by-id?eventId=${inscriptionData.event}`,
+          `http://localhost:3002/event/by-id?eventId=${inscriptionData.event}&moduleName=events`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -103,7 +103,9 @@ class InscriptionService {
       } catch (error) {
         console.error("Error al valida evento:", error);
       }
+
       console.log("Evento encontrado:", event.data);
+
       if (!event.data) {
         throw new Error("Evento no encontrado");
       }
@@ -142,10 +144,13 @@ class InscriptionService {
       // 5. Registro de inscripcion
       const newInscription = {
         ...inscriptionData,
-        status: "Pendiente",
-        typeInscription: typeSuscription,
-        event: event,
+        status: true,
+        statusDetail: "Activo",
+        typeInscription: typeSuscription._id,
+        event: event.data._id,
       };
+
+      console.log("Nueva inscripcion:", newInscription);
 
       const saveInscription = new Inscription(newInscription);
       await saveInscription.save();
@@ -153,8 +158,8 @@ class InscriptionService {
       // 6. Actualizo la capacidad del evento
       event.data.capacity -= 1;
 
-      const updateEventCapacity = await axios.put(
-        `http://localhost:3002/events/${inscriptionData.event._id}/capacity`,
+      const updateEventCapacity = await axios.patch(
+        `http://localhost:3002/event/capacity?moduleName=events&eventId=${inscriptionData.event}`,
         {
           capacity: event.data.capacity,
         },
@@ -171,10 +176,9 @@ class InscriptionService {
         throw new Error("Error al actualizar la capacidad del evento");
       }
 
-      const inscription = new Inscription(newInscription);
-      await inscription.save();
-      return inscription;
+      return saveInscription;
     } catch (error) {
+      console.error("Error al registrar la inscripcion:", error);
       throw new Error("Error al registrar la inscripcion");
     }
   }
@@ -186,15 +190,21 @@ class InscriptionService {
       if (!inscription) throw new Error("Inscripcion no encontrada");
 
       // 2. Valido existencia de evento y estado
-      const event = await axios.get(
-        `http://localhost:3002/events/${inscription.event._id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      let event;
+      try {
+        //1. Validacion de existencia de evento y estado
+        event = await axios.get(
+          `http://localhost:3002/event/by-id?eventId=${inscription.event}&moduleName=events`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error al valida evento:", error);
+      }
 
       const dataEvent = event.data;
 
@@ -210,7 +220,7 @@ class InscriptionService {
 
       // 4. Valido existencia de tipo de inscripcion y estado en caso de que se actualice
       const typeSuscription = await TypeInscription.findById(
-        inscriptionData.typeInscription
+        inscription.typeInscription
       );
       if (!typeSuscription)
         throw new Error("Tipo de inscripcion no encontrado");

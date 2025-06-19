@@ -29,25 +29,25 @@ app.use((req, res, next) => {
   next();
 });
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  debug: true,
-  logger: true,
-  tls: {
-    // No fallar en certificados inválidos
-    rejectUnauthorized: false,
-  },
-});
-
 // Controlador de eventos
-app.use("/notifications", async (req, res, next) => {
+app.post("/send", async (req, res, next) => {
   const { email, subject, message } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE === "true",
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+    debug: true,
+    logger: true,
+    tls: {
+      // No fallar en certificados inválidos
+      rejectUnauthorized: false,
+    },
+  });
 
   // Validación básica
   if (!email || !subject || !message) {
@@ -60,7 +60,7 @@ app.use("/notifications", async (req, res, next) => {
   try {
     const mailOptions = {
       from: process.env.SMTP_FROM,
-      email,
+      to: email,
       subject,
       message,
     };
