@@ -6,7 +6,7 @@ export const speakerRouter = Roter.Router();
 
 // Rutas para los speakers
 speakerRouter.get("/", speakerController.getSpeakersByEvent);
-speakerRouter.get("/byId", speakerController.getSpeakerById);
+speakerRouter.get("/by-Id", speakerController.getSpeakerById);
 speakerRouter.post("/", speakerController.createSpeaker);
 speakerRouter.put("/", speakerController.updateSpeaker);
 speakerRouter.delete("/", speakerController.deleteSpeaker);

@@ -43,7 +43,7 @@ class ScheduleService {
       const schedule = await Schedule.findByIdAndUpdate(
         scheduleId,
         updateData,
-        { new: true, runValidators: true }
+        { new: true }
       );
       if (!schedule) {
         throw new Error("Programa no encontrado");

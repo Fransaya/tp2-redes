@@ -32,7 +32,7 @@ typeInscriptionRoutes.put(
 );
 // Delete a type inscription
 typeInscriptionRoutes.delete(
-  "/disable",
+  "/desactivate",
   typeInscriptionController.deactivateTypeInscription
 );
 // Activate a type inscription

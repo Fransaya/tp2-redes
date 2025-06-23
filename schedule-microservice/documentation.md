@@ -157,13 +157,13 @@ Todos los endpoints requieren:
 }
 ```
 
-### GET `/rooms/{id}`
+### GET `/rooms/by-id?roomId={id}`
 
 **Descripción**: Obtiene información detallada de una sala
 
 **Roles permitidos**: Todos los autenticados
 
-### PUT `/rooms/{id}`
+### PUT `/rooms?roomId={id}`
 
 **Descripción**: Actualiza información de una sala
 
@@ -173,7 +173,7 @@ Todos los endpoints requieren:
 
 - No se puede reducir la capacidad si hay actividades programadas que excedan la nueva capacidad
 
-### DELETE `/rooms/{id}`
+### DELETE `/rooms?roomId={id}`
 
 **Descripción**: Elimina una sala (solo si no tiene actividades programadas)
 
@@ -328,7 +328,8 @@ Todos los endpoints requieren:
 {
   "speakerId": "speaker_uuid",
   "role": "main_speaker",
-  "speakerOrder": 1
+  "speakerOrder": 1,
+  "activityId": "acitivity_uuid"
 }
 ```
 
@@ -383,19 +384,19 @@ Todos los endpoints requieren:
 }
 ```
 
-### GET `/speakers/{id}`
+### GET `/speakers/by-Id?speakerId=68596a2a7e2d7235eaa56f32`
 
 **Descripción**: Obtiene información completa de un expositor
 
 **Roles permitidos**: Todos los autenticados
 
-### PUT `/speakers/{id}`
+### PUT `/speakers?speakerId={id}`
 
 **Descripción**: Actualiza información del expositor
 
 **Roles permitidos**: `admin`, `organizador`, `expositor` (solo su propio perfil)
 
-### DELETE `/speakers/{id}`
+### DELETE `/speakers?speakerId={id}`
 
 **Descripción**: Elimina un expositor del evento
 
@@ -405,31 +406,7 @@ Todos los endpoints requieren:
 
 - No se puede eliminar si tiene actividades asignadas
 
-### GET `/speakers/{id}/schedule`
-
-**Descripción**: Obtiene la agenda personal del expositor
-
-**Respuesta**:
-
-```json
-{
-  "success": true,
-  "data": {
-    "speakerId": "speaker_uuid",
-    "activities": [
-      {
-        "id": "activity_uuid",
-        "title": "Conferencia sobre React",
-        "startTime": "2024-03-15T14:00:00Z",
-        "endTime": "2024-03-15T15:30:00Z",
-        "room": "Sala B",
-        "role": "main_speaker",
-        "status": "confirmed"
-      }
-    ]
-  }
-}
-```
+````
 
 ---
 
@@ -458,7 +435,7 @@ Todos los endpoints requieren:
   "eventId": "event_uuid",
   "checkTypes": ["room_overlap", "speaker_overlap", "capacity_exceeded"]
 }
-```
+````
 
 **Tipos de conflictos detectados**:
 
@@ -467,11 +444,11 @@ Todos los endpoints requieren:
 - `capacity_exceeded`: Actividad excede capacidad de la sala
 - `time_conflict`: Actividades fuera del horario del evento
 
-### GET `/conflicts/{id}`
+### GET `/conflicts?conflictId={}`
 
 **Descripción**: Obtiene detalles específicos de un conflicto
 
-### PUT `/conflicts/{id}/resolve`
+### PUT `/conflicts/resolve?conflictId={}`
 
 **Descripción**: Marca un conflicto como resuelto
 
@@ -484,7 +461,7 @@ Todos los endpoints requieren:
 }
 ```
 
-### DELETE `/conflicts/{id}`
+### DELETE `/conflicts?conflictId={}`
 
 **Descripción**: Marca un conflicto como ignorado
 

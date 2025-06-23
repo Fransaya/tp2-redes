@@ -20,11 +20,15 @@ export const authMiddleware = (req, res, next) => {
       },
     })
     .then((response) => {
+      const dataUser = response.data.data;
+
+      console.log("Usuario verificado:", dataUser.user);
       // Si la verificación es exitosa, se agrega el usuario al request
-      req.user = response.data.user;
+      req.user = { ...dataUser.user, token };
       next();
     })
     .catch((error) => {
+      console.error("Error al verificar el token:", error.message);
       // Si hay un error en la verificación, se retorna un error 401
       return res.status(401).json({ message: "Unauthorized" });
     });

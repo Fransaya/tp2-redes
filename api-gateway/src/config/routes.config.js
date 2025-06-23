@@ -1,4 +1,4 @@
-// config/routes.config.js - Configuración actualizada con múltiples instancias
+// config/routes.config.js - Configuración corregida
 export const ROUTES = [
   {
     url: "/auth",
@@ -9,14 +9,12 @@ export const ROUTES = [
       max: 100,
     },
     instances: [
-      "http://localhost:3001/auth",
-      "http://localhost:3011/auth", // Segunda instancia del servicio auth
-      "http://localhost:3021/auth", // Tercera instancia del servicio auth
+      "http://localhost:3001", // ← SIN el prefijo /auth
     ],
     proxy: {
       changeOrigin: true,
       pathRewrite: {
-        "^/auth": "",
+        // NO reescribir nada - mantener la URL completa tal como viene
       },
     },
   },
@@ -29,14 +27,12 @@ export const ROUTES = [
       max: 100,
     },
     instances: [
-      "http://localhost:3001/user",
-      "http://localhost:3011/user", // Segunda instancia del servicio auth
-      "http://localhost:3021/user", // Tercera instancia del servicio auth
+      "http://localhost:3001", // ← SIN el prefijo /user
     ],
     proxy: {
       changeOrigin: true,
       pathRewrite: {
-        "^/auth": "",
+        // NO reescribir nada - mantener la URL completa tal como viene
       },
     },
   },
@@ -48,11 +44,13 @@ export const ROUTES = [
       windowMs: 15 * 60 * 1000,
       max: 100,
     },
-    instances: ["http://localhost:3002/events", "http://localhost:3012/events"],
+    instances: [
+      "http://localhost:3002", // ← SIN el prefijo /events
+    ],
     proxy: {
       changeOrigin: true,
       pathRewrite: {
-        "^/events": "",
+        // NO reescribir nada - mantener la URL completa tal como viene
       },
     },
   },
@@ -65,13 +63,12 @@ export const ROUTES = [
       max: 100,
     },
     instances: [
-      "http://localhost:3003/inscriptions",
-      "http://localhost:3013/inscriptions",
+      "http://localhost:3003", // ← SIN el prefijo /inscriptions
     ],
     proxy: {
       changeOrigin: true,
       pathRewrite: {
-        "^/inscriptions": "",
+        // NO reescribir nada - mantener la URL completa tal como viene
       },
     },
   },
@@ -84,13 +81,12 @@ export const ROUTES = [
       max: 100,
     },
     instances: [
-      "http://localhost:3004/schedule",
-      "http://localhost:3014/schedule",
+      "http://localhost:3004", // ← SIN el prefijo /schedule
     ],
     proxy: {
       changeOrigin: true,
       pathRewrite: {
-        "^/schedule": "",
+        // NO reescribir nada - mantener la URL completa tal como viene
       },
     },
   },
@@ -103,13 +99,12 @@ export const ROUTES = [
       max: 100,
     },
     instances: [
-      "http://localhost:3005/notifications",
-      "http://localhost:3015/notifications",
+      "http://localhost:3005", // ← SIN el prefijo /notifications
     ],
     proxy: {
       changeOrigin: true,
       pathRewrite: {
-        "^/notifications": "",
+        // NO reescribir nada - mantener la URL completa tal como viene
       },
     },
   },

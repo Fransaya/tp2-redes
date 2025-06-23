@@ -11,8 +11,8 @@ scheduleRouter.get("/by-id", scheduleController.getScheduleById);
 // Crear un nuevo programa
 scheduleRouter.post("/", scheduleController.createSchedule);
 // Actualizar un programa existente
-scheduleRouter.put("/", scheduleController.updateSchedule);
+scheduleRouter.put("/update", scheduleController.updateSchedule);
 // Eliminar un programa
-scheduleRouter.delete("/", scheduleController.deleteSchedule);
+scheduleRouter.delete("/delete", scheduleController.deleteSchedule);
 // Publica un programa
 scheduleRouter.post("/publish", scheduleController.publishSchedule);

@@ -35,8 +35,10 @@ class activityController {
   async createActivity(req, res) {
     try {
       const activity = await activityService.createActivity(req.body);
+      console.log("Activity created:", activity);
       res.status(201).json(activity);
     } catch (error) {
+      console.error("Error creating activity:", error);
       res.status(500).json({ message: "Error creating activity", error });
     }
   }

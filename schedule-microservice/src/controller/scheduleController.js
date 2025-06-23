@@ -54,7 +54,9 @@ class ScheduleController {
     try {
       const { scheduleId } = req.query;
       await scheduleService.deleteSchedule(scheduleId);
-      res.status(204).send();
+      res
+        .status(200)
+        .json({ status: true, message: "Programa eliminado correctamente" });
     } catch (error) {
       next(error);
     }
@@ -64,7 +66,7 @@ class ScheduleController {
   async publishSchedule(req, res, next) {
     try {
       const { scheduleId } = req.query;
-      const publishedSchedule = await scheduleService.publishSchedule(
+      const publishedSchedule = await scheduleService.publishedSchedule(
         scheduleId
       );
       res.status(200).json(publishedSchedule);

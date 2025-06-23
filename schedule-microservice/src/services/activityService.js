@@ -69,7 +69,7 @@ class ActivityService {
         _id: activityData.roomId,
       });
 
-      if (isRoomAvailable) {
+      if (!isRoomAvailable) {
         throw new Error("The room is not available for the specified time.");
       }
 

@@ -38,8 +38,11 @@ class LoadBalancer {
   // Get healthy instances only
   async getHealthyInstances(instances) {
     const healthChecks = await Promise.allSettled(
-      instances.map((instance) => this.healthCheck(instance))
+      instances.map((instance) => healthCheck(instance))
     );
+
+    console.log("instances" + instances);
+    console.log("healthChecks" + healthChecks);
 
     return instances.filter(
       (instance, index) =>
@@ -57,16 +60,16 @@ class LoadBalancer {
     }
 
     // Obtener instancias saludables
-    const healthyInstances = await this.getHealthyInstances(instances);
+    const healthyInstances = await getHealthyInstances(instances);
 
     if (healthyInstances.length === 0) {
       console.warn(
         `No healthy instances for service ${service}, using all instances`
       );
-      return this.roundRobin(instances, service);
+      return roundRobin(instances, service);
     }
 
-    return this.roundRobin(healthyInstances, service);
+    return roundRobin(healthyInstances, service);
   }
 }
 
