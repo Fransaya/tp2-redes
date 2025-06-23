@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 // Controlador de eventos
-app.post("/send", async (req, res, next) => {
+app.post("/notifications/send", async (req, res, next) => {
   const { email, subject, message } = req.body;
 
   const transporter = nodemailer.createTransport({
@@ -62,7 +62,7 @@ app.post("/send", async (req, res, next) => {
       from: process.env.SMTP_FROM,
       to: email,
       subject,
-      message,
+      html: message,
     };
 
     const info = await transporter.sendMail(mailOptions);

@@ -3,6 +3,8 @@ import TypeInscription from "../model/TypeInscription.js";
 
 import axios from "axios";
 
+import QRCode from "qrcode";
+
 class InscriptionService {
   // Obtener lista de inscripciones
   async getAllInscriptions() {
@@ -176,7 +178,54 @@ class InscriptionService {
         throw new Error("Error al actualizar la capacidad del evento");
       }
 
-      return saveInscription;
+      // 7. Genero el QR con la información de la inscripción
+      const qrData = {
+        nombre: saveInscription.name,
+        email: saveInscription.email,
+        evento: event.data.name,
+        fecha: event.data.startDate,
+        tipoInscripcion: typeSuscription.name,
+        idInscripcion: saveInscription._id,
+      };
+      const qrString = JSON.stringify(qrData);
+      const qrCode = await QRCode.toDataURL(qrString);
+
+      // 8. Llamo al microservicio de notificaciones para enviar el correo
+      try {
+        // Plantilla HTML con el QR embebido
+        const htmlMessage = `
+          <div style="font-family: Arial, sans-serif;">
+            <h2>Inscripción confirmada</h2>
+            <p>Te has inscripto al evento <strong>${event.data.title}</strong>.</p>
+            <p><strong>Nombre:</strong> ${saveInscription.name}</p>
+            <p><strong>Email:</strong> ${saveInscription.email}</p>
+            <p><strong>Fecha:</strong> ${event.data.startDate}</p>
+            <p><strong>Tipo de inscripción:</strong> ${typeSuscription.name}</p>
+            <p>Presenta este código QR al ingresar:</p>
+            <img src="${qrCode}" alt="QR de inscripción" style="width:200px;height:200px;" />
+          </div>
+        `;
+
+        await axios.post(
+          "http://localhost:3005/notifications/send",
+          {
+            email: saveInscription.email,
+            subject: "Inscripción confirmada",
+            message: htmlMessage,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error al enviar notificación:", error);
+      }
+
+      // Devuelvo la inscripción y el QR
+      return { inscription: saveInscription, qr: qrCode };
     } catch (error) {
       console.error("Error al registrar la inscripcion:", error);
       throw new Error("Error al registrar la inscripcion");
